@@ -9,7 +9,6 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 router.post("/bookings", async (req, res) => {
   try {
     const {
-      paymentMethodId,
       userEmail,
       hotelId,
       roomType,
@@ -22,7 +21,7 @@ router.post("/bookings", async (req, res) => {
 
     const user = await User.findOne({ emailAddress: userEmail });
     if (!user) {
-      console.error(`User not found for email: ${userEmail}`); // Log the email
+      console.error(`User not found for email: ${userEmail}`);
       return res
         .status(404)
         .json({ success: false, message: "User not found" });
@@ -41,18 +40,17 @@ router.post("/bookings", async (req, res) => {
         .json({ success: false, message: "Hotel not found" });
     }
 
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(totalPrice * 100),
-      currency: "usd",
-      payment_method: paymentMethodId,
-      confirm: true,
-    });
+    // const paymentIntent = await stripe.paymentIntents.create({
+    //   amount: Math.round(totalPrice * 100),
+    //   currency: "npr",
+    //   confirm: true,
+    // });
 
-    if (paymentIntent.status !== "succeeded") {
-      return res
-        .status(400)
-        .json({ success: false, message: "Payment failed" });
-    }
+    // if (paymentIntent.status !== "succeeded") {
+    //   return res
+    //     .status(400)
+    //     .json({ success: false, message: "Payment failed" });
+    // }
 
     // Create a new booking
     const newBooking = new Booking({
@@ -64,7 +62,6 @@ router.post("/bookings", async (req, res) => {
       totalPrice,
       roomType,
       numberOfGuests,
-      paymentIntentId: paymentIntent.id,
     });
 
     const savedBooking = await newBooking.save();
