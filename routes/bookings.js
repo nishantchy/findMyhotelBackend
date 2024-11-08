@@ -11,6 +11,7 @@ router.post("/bookings", async (req, res) => {
     const {
       userEmail,
       hotelId,
+      hotelImage,
       roomType,
       numberOfGuests,
       totalPrice,
@@ -57,6 +58,7 @@ router.post("/bookings", async (req, res) => {
       user: user._id,
       hotelId: hotel._id,
       hotelName: hotel.name,
+      hotelImage: hotel.images[0],
       checkInDate,
       checkOutDate,
       totalPrice,

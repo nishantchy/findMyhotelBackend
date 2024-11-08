@@ -10,6 +10,11 @@ const bookingSchema = new mongoose.Schema({
     required: true,
   },
   hotelName: { type: String, required: true },
+  hotelImage: {
+    type: String,
+    required: true,
+  },
+
   checkInDate: { type: Date, required: true },
   checkOutDate: { type: Date, required: true },
   totalPrice: { type: Number, required: true },
